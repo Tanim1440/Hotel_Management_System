@@ -1,0 +1,20 @@
+.categories{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:35px;
+    padding:25px;
+    background:white;
+    border-bottom:1px solid #ddd;
+    flex-wrap:wrap;
+}
+
+.category{
+    text-align:center;
+    color:#666;
+    cursor:pointer;
+}
+
+.category p{
+    margin-top:5px;
+}
