@@ -89,7 +89,35 @@ class RegistrationForm {
             }
         });
         // Real-Time Password Complexity Analysis
-       
+        userPassword.addEventListener('input', () => {
+            const value = userPassword.value;
+            let score = 0;
+            if (value.length >= 8) score++;
+            if (/[A-Z]/.test(value)) score++;
+            if (/[0-9]/.test(value)) score++;
+            if (/[^A-Za-z0-9]/.test(value)) score++;
+
+            if (value.length === 0) {
+                strengthMeter.style.width = '0%';
+                strengthText.textContent = 'Strength: Empty';
+                strengthText.className = 'text-xs text-gray-500 mt-1';
+            } else if (score < 1) {
+                strengthMeter.style.width = '25%';
+                strengthMeter.className = 'h-full bg-red-500 state-transition';
+                strengthText.textContent = 'Strength: Weak (Unsafe)';
+                strengthText.className = 'text-xs text-red-500 mt-1 font-semibold';
+            } else if (score <= 3) {
+                strengthMeter.style.width = '60%';
+                strengthMeter.className = 'h-full bg-yellow-500 state-transition';
+                strengthText.textContent = 'Strength: Moderate';
+                strengthText.className = 'text-xs text-yellow-600 mt-1 font-semibold';
+            } else {
+                strengthMeter.style.width = '100%';
+                strengthMeter.className = 'h-full bg-green-500 state-transition';
+                strengthText.textContent = 'Strength: Strong (Secure)';
+                strengthText.className = 'text-xs text-green-600 mt-1 font-semibold';
+            }
+        });
 
         // Form Submission Interceptor
     }
