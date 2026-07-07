@@ -120,5 +120,24 @@ class RegistrationForm {
         });
 
         // Form Submission Interceptor
+         registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
+            const isPasswordStrong = userPassword.value.length >= 8;
+
+            if (isEmailValid && isPasswordStrong) {
+                modal.innerHTML = `
+                    <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 w-full max-w-md relative text-center">
+                        <h2 class="text-2xl font-bold mb-2 text-green-600">Account Created Safely!</h2>
+                        <p class="text-sm text-gray-600">Welcome to Explore. Your secure registration is complete.</p>
+                        <button onclick="window.location.reload()" class="mt-6 bg-[#ff385c] hover:bg-[#e03150] text-white font-bold py-2 px-6 rounded-lg state-transition">
+                            Close & Continue
+                        </button>
+                    </div>
+                `;
+            } else {
+                alert('Validation failed! Please correct validation inputs before committing.');
+            }
+        });
     }
 }
