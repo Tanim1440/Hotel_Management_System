@@ -120,5 +120,72 @@ class RegistrationForm {
         });
 
         // Form Submission Interceptor
+           registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
+            const isPasswordStrong = userPassword.value.length >= 8;
+
+            if (isEmailValid && isPasswordStrong) {
+                modal.innerHTML = `
+                    <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 w-full max-w-md relative text-center">
+                        <h2 class="text-2xl font-bold mb-2 text-green-600">Account Created Safely!</h2>
+                        <p class="text-sm text-gray-600">Welcome to Explore. Your secure registration is complete.</p>
+                        <button onclick="window.location.reload()" class="mt-6 bg-[#ff385c] hover:bg-[#e03150] text-white font-bold py-2 px-6 rounded-lg state-transition">
+                            Close & Continue
+                        </button>
+                    </div>
+                `;
+            } else {
+                alert('Validation failed! Please correct validation inputs before committing.');
+            }
+        });
     }
 }
+
+// Component 3: The Root Application Class managing state and execution
+class DashboardApp {
+    constructor() {
+        this.hotelData = [
+            { title: "Sea View Villa", price: "৳5000", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" },
+            { title: "Luxury Resort", price: "৳10000", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200" },
+            { title: "Hard Rock Street", price: "৳3000", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200" }
+        ];
+        this.appContainer = document.getElementById('app');
+    }
+
+    render() {
+        // 1. Render the Grid of Cards
+        let uiString = '<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">';
+        this.hotelData.forEach(data => {
+            const card = new HotelCard(data.title, data.price, data.image);
+            uiString += card.render();
+        });
+        uiString += '</section>';
+
+        // 2. Render the Modal (Hidden)
+        const form = new RegistrationForm();
+        uiString += form.render();
+
+        this.appContainer.innerHTML = uiString;
+
+        // 3. Bind events for the form
+        form.bindEvents();
+
+        // 4. Bind the Navbar "Log In" button to open the modal
+        const loginBtn = document.getElementById('login-btn');
+        const modal = document.getElementById('registration-modal');
+        if (loginBtn && modal) {
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.remove('hidden');
+            });
+        }
+    }
+}
+
+// System Bootstrapper
+function main() {
+    const activeApp = new DashboardApp();
+    activeApp.render();
+}
+main();
