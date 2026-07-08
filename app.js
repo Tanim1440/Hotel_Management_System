@@ -120,7 +120,7 @@ class RegistrationForm {
         });
 
         // Form Submission Interceptor
-         registrationForm.addEventListener('submit', (e) => {
+           registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
             const isPasswordStrong = userPassword.value.length >= 8;
@@ -141,6 +141,7 @@ class RegistrationForm {
         });
     }
 }
+
 // Component 3: The Root Application Class managing state and execution
 class DashboardApp {
     constructor() {
@@ -187,5 +188,4 @@ function main() {
     const activeApp = new DashboardApp();
     activeApp.render();
 }
-
 main();
