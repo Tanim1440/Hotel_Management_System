@@ -35,6 +35,19 @@ class RegistrationForm {
                     
                     <form id="registration-form" novalidate class="space-y-6">
                         <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1" for="user-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="user-name"
+                        required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff385c]                 focus:outline-none state-transition"
+                        placeholder="Enter your full name"
+                    >
+                        </div>
+                        <div>
                             <label class="block text-sm font-bold text-gray-700 mb-1" for="user-email">Email Address</label>
                             <input type="email" id="user-email" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff385c] focus:outline-none state-transition"
@@ -120,25 +133,89 @@ class RegistrationForm {
         });
 
         // Form Submission Interceptor
-           registrationForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
-            const isPasswordStrong = userPassword.value.length >= 8;
+        //    registrationForm.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
+        //     const isPasswordStrong = userPassword.value.length >= 8;
 
-            if (isEmailValid && isPasswordStrong) {
-                modal.innerHTML = `
-                    <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 w-full max-w-md relative text-center">
-                        <h2 class="text-2xl font-bold mb-2 text-green-600">Account Created Safely!</h2>
-                        <p class="text-sm text-gray-600">Welcome to Explore. Your secure registration is complete.</p>
-                        <button onclick="window.location.reload()" class="mt-6 bg-[#ff385c] hover:bg-[#e03150] text-white font-bold py-2 px-6 rounded-lg state-transition">
-                            Close & Continue
-                        </button>
-                    </div>
-                `;
-            } else {
-                alert('Validation failed! Please correct validation inputs before committing.');
-            }
+        //     if (isEmailValid && isPasswordStrong) {
+        //         modal.innerHTML = `
+        //             <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 w-full max-w-md relative text-center">
+        //                 <h2 class="text-2xl font-bold mb-2 text-green-600">Account Created Safely!</h2>
+        //                 <p class="text-sm text-gray-600">Welcome to Explore. Your secure registration is complete.</p>
+        //                 <button onclick="window.location.reload()" class="mt-6 bg-[#ff385c] hover:bg-[#e03150] text-white font-bold py-2 px-6 rounded-lg state-transition">
+        //                     Close & Continue
+        //                 </button>
+        //             </div>
+        //         `;
+        //     } else {
+        //         alert('Validation failed! Please correct validation inputs before committing.');
+        //     }
+        // });
+        registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const userName = document.getElementById('user-name');
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail.value);
+    const isPasswordStrong = userPassword.value.length >= 8;
+
+    if (!userName.value.trim()) {
+        alert('Please enter your full name.');
+        return;
+    }
+
+    if (!isEmailValid) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+
+    if (!isPasswordStrong) {
+        alert('Password must contain at least 8 characters.');
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('full_name', userName.value.trim());
+    formData.append('email', userEmail.value.trim());
+    formData.append('password', userPassword.value);
+
+    try {
+        const response = await fetch('register.php', {
+            method: 'POST',
+            body: formData
         });
+
+        const result = await response.text();
+
+        if (response.ok && result === 'Registration successful!') {
+            modal.innerHTML = `
+                <div class="bg-white p-8 rounded-xl shadow-2xl border border-gray-100 w-full max-w-md relative text-center">
+                    <h2 class="text-2xl font-bold mb-2 text-green-600">
+                        Account Created Successfully!
+                    </h2>
+
+                    <p class="text-sm text-gray-600">
+                        Your account has been saved to the database.
+                    </p>
+
+                    <button
+                        onclick="window.location.reload()"
+                        class="mt-6 bg-[#ff385c] hover:bg-[#e03150] text-white font-bold py-2 px-6 rounded-lg state-transition"
+                    >
+                        Close & Continue
+                    </button>
+                </div>
+            `;
+        } else {
+            alert(result);
+        }
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert('Could not connect to the server.');
+    }
+});
     }
 }
 
