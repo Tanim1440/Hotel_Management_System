@@ -19,7 +19,7 @@ if (!isset($_SESSION["user_id"])) {
 
     <p>Your room has been booked successfully.</p>
 
-    <a href="room.php">Back to Rooms</a>
+    <a href="rooms.php">Back to Rooms</a>
 
 </body>
 </html>

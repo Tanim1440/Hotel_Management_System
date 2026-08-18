@@ -311,7 +311,7 @@ $result = $stmt->get_result();
                     Browse our available rooms and make your first booking.
                 </p>
 
-                <a href="room.php" class="book-room-btn">
+                <a href="rooms.php" class="book-room-btn">
                     Browse Rooms
                 </a>
 

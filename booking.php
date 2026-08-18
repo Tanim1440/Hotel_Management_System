@@ -262,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <h2>Hotel Management System</h2>
 
-    <a href="room.php">
+    <a href="rooms.php">
         ← Rooms
     </a>
 

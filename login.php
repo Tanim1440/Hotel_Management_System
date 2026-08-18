@@ -36,8 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION["email"] = $user["email"];
     $_SESSION["role"] = $user["role"];
 
-    header("Location: index.php");
-exit();
+    // Route users based on their role
+    if ($user["role"] === "admin") {
+        header("Location: admin_dashboard.php");
+    } else {
+        header("Location: dashboard.php");
+    }
+    exit();
 
 } else {
 
